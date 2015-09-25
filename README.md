@@ -13,8 +13,7 @@ npm install --save-dev server-mm
 ###usage
 
 ```javascript
-var gulp = require("gulp");
-var serverM = require("server-mm");
+var server = require("server-mm");
 
 server.start({
     root: __dirname + "/",
