@@ -1,0 +1,24 @@
+{
+  "name": "server-mm",
+  "version": "1.0.0",
+  "description": "web rebuild dev tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BearJ/server-mm.git"
+  },
+  "author": "bearverygood",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BearJ/server-mm/issues"
+  },
+  "homepage": "https://github.com/BearJ/server-mm#readme",
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "socket.io": "^1.2.1",
+    "parseurl": "^1.3.0"
+  }
+}
