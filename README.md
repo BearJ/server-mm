@@ -17,9 +17,14 @@ var server = require("server-mm");
 
 server.start({
     root: __dirname + "/", // 根目录
+
     port:8080, // 端口
+
     tmpl: __dirname + "/tmpl.json", // 存放模板参数的文件
-    encoding: "utf8", // 项目的默认编码，不填为utf8；如果页面和默认不一致，可在页面加上<%##encode:gbk##%>来指定读取页面的编码
+
+    encoding: "utf8", // 项目的默认编码，不填为utf8；
+    // 如果页面和默认不一致，可在页面加上<%##encode:gbk##%>来指定读取页面的编码
+
     fileNotFoundFunc: function(path){ // 当文件没找到时，会调用此方法，用于当本地和线上路径不一致时，修改路径以预览
         return path.replace(/(\/|\\)zh_CN/g, "$1htdocs$1zh_CN");
     }
