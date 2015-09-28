@@ -11,6 +11,7 @@ var http = require('http');
 var lodash = require('lodash');
 var socket = require('socket.io');
 var parseurl = require('parseurl');
+var iconv = require('iconv-lite');
 
 var tmpl = require('./lib/tmpl');
 
@@ -60,7 +61,7 @@ function handler(opts){
                     return;
                 }
                 var isDir = fs.lstatSync(path.join(abs, file)).isDirectory();
-                var url = (pathname === '/'? '' : pathname.replace(/\/$/, "")) + '/' + file + (isDir ? "/" : "");
+                var url = (pathname === '/'? '' : pathname.replace(/\/$/, '')) + '/' + file + (isDir ? '/' : '');
                 var icon = isDir ? 'icon_folder' : 'icon_file';
                 render += '<a href="'+ url +'" class="item"> <i class="'+ icon +'"></i> <span>'+ file +'</span> </a>'
             });
@@ -84,8 +85,14 @@ function handler(opts){
             return fs.createReadStream(abs).pipe(res);
         }
 
+        // 编码判断，opts的为默认，如果检测页面有<%##encode:xxx##%>这种，则为xxx编码
+        var content = fs.readFileSync(abs), encoding = opts.encoding, pageEncoding;
+        pageEncoding = content.toString().match(/<%##encode:\s*(.*?)##%>/);
+        if(pageEncoding && pageEncoding.length > 1) encoding = pageEncoding[1];
+        if(!iconv.encodingExists(encoding)) encoding = 'utf-8';
+        content = iconv.decode(content, encoding).toString();
+
         // 如果开启了模板编译
-        var content = fs.readFileSync(abs, 'utf-8');
         if(opts.tmpl){
             var context = {};
             if(fs.existsSync(opts.tmpl)){
@@ -95,7 +102,7 @@ function handler(opts){
                     throw new Error('parse context file error, please check context file ' + opts.tmpl);
                 }
             }
-            content = tmpl(content, lodash.extend(context, url.parse(req.url, true).query), abs);
+            content = tmpl(content, lodash.extend(context, url.parse(req.url, true).query), abs, encoding);
         }
 
         // 如果开启即时预览
@@ -120,13 +127,13 @@ function handler(opts){
  * @param {Object} options default: {port: 8080}
  */
 function start(options){
-    var opts = lodash.extend({port: 8080, root: __dirname, live: true, tmpl: false}, options);
+    var opts = lodash.extend({port: 8080, root: __dirname, encoding: 'utf-8', live: true, tmpl: false}, options);
     var app = http.createServer(handler(opts));
     var io = socket(app);
 
     app.listen(opts.port, function(){
         var url = 'http://127.0.0.1' + (opts.port == 80 ? '' : ':' + opts.port);
-        console.log("Server start on " + url + ".");
+        console.log('Server start on ' + url + '.');
     });
 
     // listen with socket
