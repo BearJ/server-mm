@@ -45,7 +45,7 @@ server.start({
   "retdata": {
       "a": "1",
       "b": "2"
-  }
+  },
 
   "GetAllVar": function(arg){return JSON.stringify(this);}
 }

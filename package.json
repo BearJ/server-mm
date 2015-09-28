@@ -1,6 +1,6 @@
 {
   "name": "server-mm",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "web rebuild dev tool",
   "main": "index.js",
   "scripts": {
