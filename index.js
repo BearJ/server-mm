@@ -106,7 +106,7 @@ function handler(opts){
                 content = tmpl(content, lodash.extend(context, url.parse(req.url, true).query), abs, encoding);
             }catch(err){
                 res.statusCode = 500;
-                //console.log(err.stack.toString());
+                console.log(err.stack.toString());
                 return res.end(err.stack.toString().replace(/\n/g,"<br>"));
             }
         }
@@ -140,7 +140,7 @@ function start(options){
     app.listen(opts.port, function(){
         var url = 'http://127.0.0.1' + (opts.port == 80 ? '' : ':' + opts.port);
         console.log('Server start on ' + url + '.');
-        //require('child_process').exec('start "" "' + url + '"');
+        require('child_process').exec('start "" "' + url + '"');
     });
 
     // listen with socket
