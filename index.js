@@ -1,6 +1,6 @@
 /**
  * Created by jfengjiang on 2014/12/5.
- * Updated by bearverygood on 2015/9/25.
+ * Updated by bearverygood on 2015/9/29.
  */
 
 var fs = require('fs');
@@ -102,7 +102,13 @@ function handler(opts){
                     throw new Error('parse context file error, please check context file ' + opts.tmpl);
                 }
             }
-            content = tmpl(content, lodash.extend(context, url.parse(req.url, true).query), abs, encoding);
+            try{
+                content = tmpl(content, lodash.extend(context, url.parse(req.url, true).query), abs, encoding);
+            }catch(err){
+                res.statusCode = 500;
+                //console.log(err.stack.toString());
+                return res.end(err.stack.toString().replace(/\n/g,"<br>"));
+            }
         }
 
         // 如果开启即时预览
@@ -134,7 +140,7 @@ function start(options){
     app.listen(opts.port, function(){
         var url = 'http://127.0.0.1' + (opts.port == 80 ? '' : ':' + opts.port);
         console.log('Server start on ' + url + '.');
-        require('child_process').exec('start "" "' + url + '"');
+        //require('child_process').exec('start "" "' + url + '"');
     });
 
     // listen with socket
