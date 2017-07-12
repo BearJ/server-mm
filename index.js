@@ -140,7 +140,7 @@ function start(options){
     app.listen(opts.port, function(){
         var url = 'http://127.0.0.1' + (opts.port == 80 ? '' : ':' + opts.port);
         console.log('Server start on ' + url + '.');
-        require('child_process').exec('start "" "' + url + '"');
+        require('child_process').exec('start "" "' + path.join(url, opts.dist || "") + '"');
     });
 
     // listen with socket
